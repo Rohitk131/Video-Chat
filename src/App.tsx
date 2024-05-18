@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  Call,
   CallControls,
   CallingState,
   SpeakerLayout,
@@ -14,7 +15,6 @@ import {
 import '@stream-io/video-react-sdk/dist/css/styles.css';
 import './App.css';
 
-// Your existing credentials
 const apiKey = 'mmhfdzb5evj2';
 const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRGFzaF9SZW5kYXIiLCJpc3MiOiJodHRwczovL3Byb250by5nZXRzdHJlYW0uaW8iLCJzdWIiOiJ1c2VyL0Rhc2hfUmVuZGFyIiwiaWF0IjoxNzE2MDM5ODgxLCJleHAiOjE3MTY2NDQ2ODZ9.eAkUkZGcPaL6jAdAKHx5x17b5f2nCO_mvST-xY1l1gs';
 const userId = 'Dash_Rendar';
@@ -28,10 +28,9 @@ const user: User = {
 const client = new StreamVideoClient({ apiKey, user, token });
 
 export default function App() {
-  const [call, setCall] = useState(null);
+  const [call, setCall] = useState<Call | null>(null);
 
-  const handleJoinWithInviteCode = (inviteCode) => {
-    // Fetch the call ID associated with the invite code
+  const handleJoinWithInviteCode = (inviteCode: string) => {
     const callId = getCallIdFromInviteCode(inviteCode);
     if (callId) {
       const newCall = client.call('default', callId);
@@ -63,8 +62,13 @@ export default function App() {
   );
 }
 
-const JoinForm = ({ onJoin, onGenerateInviteCode }) => {
-  const [inviteCode, setInviteCode] = useState('');
+interface JoinFormProps {
+  onJoin: (inviteCode: string) => void;
+  onGenerateInviteCode: () => void;
+}
+
+const JoinForm: React.FC<JoinFormProps> = ({ onJoin, onGenerateInviteCode }) => {
+  const [inviteCode, setInviteCode] = useState<string>('');
 
   return (
     <div className="form-container">
@@ -83,22 +87,18 @@ const JoinForm = ({ onJoin, onGenerateInviteCode }) => {
   );
 };
 
-const getCallIdFromInviteCode = (inviteCode) => {
-  // Implement this function to map invite codes to call IDs
-  // For demo purposes, return the fixed callId
-  const inviteCodeMapping = {
+const getCallIdFromInviteCode = (inviteCode: string): string | undefined => {
+  const inviteCodeMapping: { [key: string]: string } = {
     '12345': 'IAuWpHkjQIIw', // example mapping
   };
   return inviteCodeMapping[inviteCode];
 };
 
-const generateInviteCode = (callId) => {
-  // Implement this function to generate and store invite codes
-  // For demo purposes, return a fixed invite code
+const generateInviteCode = (callId: string): string => {
   return '12345'; // example invite code
 };
 
-export const MyUILayout = () => {
+export const MyUILayout: React.FC = () => {
   const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();
 
