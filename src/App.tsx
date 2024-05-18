@@ -42,8 +42,7 @@ export default function App() {
   };
 
   const handleGenerateInviteCode = () => {
-    const callId = 'IAuWpHkjQIIw'; // generate a unique call ID
-    const inviteCode = generateInviteCode(callId);
+    const inviteCode = generateInviteCode();
     alert(`Invite code: ${inviteCode}`);
   };
 
