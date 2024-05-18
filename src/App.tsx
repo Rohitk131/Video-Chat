@@ -94,7 +94,7 @@ const getCallIdFromInviteCode = (inviteCode: string): string | undefined => {
   return inviteCodeMapping[inviteCode];
 };
 
-const generateInviteCode = (): string => {
+const generateInviteCode = (callId: string): string => {
   return '12345'; // example invite code
 };
 
